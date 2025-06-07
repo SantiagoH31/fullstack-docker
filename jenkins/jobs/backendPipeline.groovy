@@ -17,9 +17,9 @@ pipelineJob('Backend/backend-pipeline') {
 
     triggers {
         githubPush()
-        pollSCM('H/10 * * * *')
-        cron('H 1 * * *') // Build nocturno
+        cron('H/10 * * * *') // Ejecuta cada 10 minutos
     }
+
 
     definition {
         cpsScm {
