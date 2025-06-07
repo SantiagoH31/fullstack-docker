@@ -13,8 +13,20 @@ jenkins:
           - mailer:
               emailAddress: 
   authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
+    unsecured: {}
+    # Alternativa más permisiva pero con algo de control:
+    # globalMatrix:
+    #   permissions:
+    #     - "Overall/Administer:admin"
+    #     - "Overall/Read:anonymous"
+    #     - "Job/Build:anonymous"
+    #     - "Job/Cancel:anonymous"
+    #     - "Job/Configure:anonymous"
+    #     - "Job/Create:anonymous"
+    #     - "Job/Delete:anonymous"
+    #     - "Job/Discover:anonymous"
+    #     - "Job/Read:anonymous"
+    #     - "Job/Workspace:anonymous"
 
   globalNodeProperties:
     - envVars:
@@ -28,6 +40,9 @@ security:
     approvedSignatures: []
     approvedClasspathEntries: []
     pendingScripts: []
+  # Deshabilitar la aprobación de scripts para automatización
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
 
 jobs:
   - script: |
