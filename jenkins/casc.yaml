@@ -9,40 +9,16 @@ jenkins:
        - id: admin
          password: admin123
          name: "Admin User"
-         properties:
-          - mailer:
-              emailAddress: 
+         email: "admin@localhost"
   authorizationStrategy:
-    unsecured: {}
-    # Alternativa más permisiva pero con algo de control:
-    # globalMatrix:
-    #   permissions:
-    #     - "Overall/Administer:admin"
-    #     - "Overall/Read:anonymous"
-    #     - "Job/Build:anonymous"
-    #     - "Job/Cancel:anonymous"
-    #     - "Job/Configure:anonymous"
-    #     - "Job/Create:anonymous"
-    #     - "Job/Delete:anonymous"
-    #     - "Job/Discover:anonymous"
-    #     - "Job/Read:anonymous"
-    #     - "Job/Workspace:anonymous"
+    anyoneCanDoAnything:
+      allowAnonymousRead: true
 
   globalNodeProperties:
     - envVars:
         env:
           - key: "DOCKER_HOST"
             value: "unix:///var/run/docker.sock"
-
-security:
-  scriptApproval:
-    approvedScriptHashes: []
-    approvedSignatures: []
-    approvedClasspathEntries: []
-    pendingScripts: []
-  # Deshabilitar la aprobación de scripts para automatización
-  globalJobDslSecurityConfiguration:
-    useScriptSecurity: false
 
 jobs:
   - script: |
@@ -51,7 +27,7 @@ jobs:
         scm {
           git {
             remote {
-              url('https://github.com/SantiagoH31/fullstack-docker.git')
+              url('.')
             }
             branch('*/main')
           }
