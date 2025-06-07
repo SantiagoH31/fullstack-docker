@@ -2,7 +2,7 @@ jenkins:
   systemMessage: "Jenkins configured automatically by Configuration as Code plugin"
   numExecutors: 2
   mode: NORMAL
-  
+
   securityRealm: "none"
   authorizationStrategy: "unsecured"
 
@@ -19,7 +19,7 @@ jobs:
         scm {
           git {
             remote {
-              url('.')
+              url('https://github.com/SantiagoH31/fullstack-docker.git')
             }
             branch('*/main')
           }
