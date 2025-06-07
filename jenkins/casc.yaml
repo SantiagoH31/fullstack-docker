@@ -2,17 +2,9 @@ jenkins:
   systemMessage: "Jenkins configured automatically by Configuration as Code plugin"
   numExecutors: 2
   mode: NORMAL
-  securityRealm:
-    local:
-      allowsSignup: false
-      users:
-       - id: admin
-         password: admin123
-         name: "Admin User"
-         email: "admin@localhost"
-  authorizationStrategy:
-    anyoneCanDoAnything:
-      allowAnonymousRead: true
+  
+  securityRealm: "none"
+  authorizationStrategy: "unsecured"
 
   globalNodeProperties:
     - envVars:
