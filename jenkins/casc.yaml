@@ -9,7 +9,9 @@ jenkins:
        - id: admin
          password: admin123
          name: "Admin User"
-         email: "admin@localhost"
+         properties:
+          - mailer:
+              emailAddress: 
   authorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
@@ -27,7 +29,7 @@ jobs:
         scm {
           git {
             remote {
-              url('.')
+              url('https://github.com/SantiagoH31/fullstack-docker.git')
             }
             branch('*/main')
           }
