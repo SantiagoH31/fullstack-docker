@@ -22,6 +22,13 @@ jenkins:
           - key: "DOCKER_HOST"
             value: "unix:///var/run/docker.sock"
 
+security:
+  scriptApproval:
+    approvedScriptHashes: []
+    approvedSignatures: []
+    approvedClasspathEntries: []
+    pendingScripts: []
+
 jobs:
   - script: |
       job('seed-job') {
