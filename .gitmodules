@@ -1,0 +1,6 @@
+[submodule "back-Docker"]
+	path = back-Docker
+	url = https://github.com/legarrod/back-Docker.git
+[submodule "front-Docker"]
+	path = front-Docker
+	url = https://github.com/legarrod/front-Docker.git

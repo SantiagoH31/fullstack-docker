@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./front-Docker
+      dockerfile: Dockerfile
+    container_name: angular-frontend-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./front-Docker:/app
+      - /app/node_modules
+    depends_on:
+      - node-app
+    networks:
+      - app-network
+
+  node-app:
+    build:
+      context: ./back-Docker
+      dockerfile: Dockerfile
+    container_name: node-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=example
+      - DB_NAME=mydb
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:14
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins-server
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jenkins/jobs:/var/jenkins_home/jobs
+      - ./jenkins/plugins.txt:/usr/share/jenkins/ref/plugins.txt
+      - ./jenkins/casc.yaml:/var/jenkins_home/casc.yaml
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc.yaml
+      - GITHUB_USERNAME=${GITHUB_USERNAME}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD:-admin123}
+    env_file:
+      - .env
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+      - node-app
+
+volumes:
+  pgdata:
+  jenkins_home:
+
+networks:
+  app-network:
+    driver: bridge

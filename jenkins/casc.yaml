@@ -1,0 +1,55 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically by Configuration as Code plugin"
+  numExecutors: 2
+  mode: NORMAL
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+       - id: admin
+         password: admin123
+         name: "Admin User"
+         email: "admin@localhost"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "DOCKER_HOST"
+            value: "unix:///var/run/docker.sock"
+
+jobs:
+  - script: |
+      job('seed-job') {
+        description('Seed job to create all other jobs')
+        scm {
+          git {
+            remote {
+              url('.')
+            }
+            branch('*/main')
+          }
+        }
+        triggers {
+          scm('H/5 * * * *')
+        }
+        steps {
+          dsl {
+            external('jenkins/jobs/*.groovy')
+            removeAction('DELETE')
+          }
+        }
+      }
+
+tool:
+  nodejs:
+    installations:
+      - name: "NodeJS-18"
+        properties:
+          - installSource:
+              installers:
+                - nodeJSInstaller:
+                    id: "18.17.0"
+                    npmPackagesRefreshHours: 72
