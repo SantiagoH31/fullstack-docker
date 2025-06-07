@@ -1,6 +1,5 @@
 FROM jenkins/jenkins:lts
 
-# Cambiar a usuario root para instalar dependencias
 USER root
 
 # Instalar Docker CLI
@@ -15,17 +14,15 @@ RUN apt-get update && \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs
 
-# Copiar lista de plugins
+# Copiar lista de plugins y configuraciones
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+COPY casc.yaml /usr/share/jenkins/ref/casc.yaml
 
 # Instalar plugins
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
 
-# Volver al usuario jenkins
+# Habilitar configuración como código
+ENV CASC_JENKINS_CONFIG=/usr/share/jenkins/ref/casc.yaml
+
 USER jenkins
-
-# Copiar configuración como código
-COPY casc.yaml /var/jenkins_home/casc.yaml
-
-# Exponer puerto
 EXPOSE 8080
