@@ -28,10 +28,10 @@ pipeline {
         stage('Stop Existing Services') {
             steps {
                 script {
-                    sh '''
-                        docker-compose down || true
+                    sh """
+                        docker compose down || true
                         docker system prune -f
-                    '''
+                    """
                 }
             }
         }
@@ -39,25 +39,25 @@ pipeline {
         stage('Deploy Services') {
             steps {
                 script {
-                    sh '''
+                    sh """
                         echo "=== Starting database ==="
-                        docker-compose up -d db
+                        docker compose up -d db
                         
                         echo "=== Waiting for database to be ready ==="
                         sleep 10
                         
                         echo "=== Starting backend ==="
-                        docker-compose up -d node-app
+                        docker compose up -d node-app
                         
                         echo "=== Waiting for backend to be ready ==="
                         sleep 5
                         
                         echo "=== Starting frontend ==="
-                        docker-compose up -d frontend
+                        docker compose up -d frontend
                         
                         echo "=== Checking services status ==="
-                        docker-compose ps
-                    '''
+                        docker compose ps
+                    """
                 }
             }
         }
@@ -66,11 +66,11 @@ pipeline {
             steps {
                 script {
                     sleep 30
-                    sh '''
+                    sh """
                         echo "=== Health check ==="
                         curl -f http://localhost:3000/health || echo "Backend health check failed"
                         curl -f http://localhost:4200 || echo "Frontend health check failed"
-                    '''
+                    """
                 }
             }
         }
@@ -78,10 +78,10 @@ pipeline {
     
     post {
         always {
-            sh 'docker-compose logs --tail=50'
+            sh 'docker compose logs --tail=50'
         }
         failure {
-            sh 'docker-compose down'
+            sh 'docker compose down'
         }
     }
 }
@@ -105,7 +105,7 @@ job('monitor-logs') {
             docker ps
             
             echo "=== Recent logs from all services ==="
-            docker-compose logs --tail=20 --since=10m
+            docker compose logs --tail=20 --since=10m
             
             echo "=== Checking disk space ==="
             df -h
