@@ -88,15 +88,15 @@ job('frontend-build-with-tests') {
 
         // Publicar resultados de tests (HTML)
         publishHtml {
-            report {
+            report('Coverage Report') {
                 reportDir('coverage')
                 reportFiles('index.html')
-                reportName('Coverage Report')
                 allowMissing(false)
                 keepAll(true)
                 alwaysLinkToLastBuild(true)
             }
         }
+
 
         // Publicar resultados JUnit
         junit('test-results.xml') {
