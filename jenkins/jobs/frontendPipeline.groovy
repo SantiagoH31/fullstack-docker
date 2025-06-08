@@ -6,7 +6,6 @@ pipelineJob('frontend-build-deploy') {
         githubProjectUrl('https://github.com/legarrod/front-Docker.git')
     }
     
-    // Cambio: usar 'scm' en lugar de 'triggers' que está deprecado
     definition {
         cpsScm {
             scm {
