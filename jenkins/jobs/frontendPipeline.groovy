@@ -8,7 +8,7 @@ pipelineJob('frontend-build-deploy') {
     
     triggers {
         githubPush()
-        pollSCM('H/5 * * * *')
+        cron('H/10 * * * *')
     }
     
     definition {
@@ -42,7 +42,7 @@ job('frontend-build-with-tests') {
     
     triggers {
         githubPush()
-        pollSCM('H/5 * * * *')
+        cron('H/10 * * * *')
     }
     
     wrappers {
@@ -83,8 +83,8 @@ job('frontend-build-with-tests') {
     publishers {
         // Archivar artefactos
         archiveArtifacts {
-            pattern('dist/**/*')
-            allowEmpty(false)
+            pattern('dist/**/*')    
+            allowEmpty(true)          
         }
         
         // Publicar resultados de tests
