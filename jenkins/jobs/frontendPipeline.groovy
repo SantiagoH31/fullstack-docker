@@ -83,7 +83,7 @@ job('frontend-build-with-tests') {
     publishers {
         // Archivar artefactos
         archiveArtifacts {
-            pattern('dist/**/*')    
+            pattern('dist/**')    
             allowEmpty(true)          
         }
         
@@ -207,10 +207,7 @@ pipeline {
     
     post {
         always {
-            archiveArtifacts {
-            pattern('dist/**/*')
-            allowEmpty(false)
-        }
+            archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             cleanWs()
         }
         failure {
