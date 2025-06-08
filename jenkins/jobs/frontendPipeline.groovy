@@ -80,33 +80,25 @@ job('frontend-build-with-tests') {
     }
     
     publishers {
-        // Archivar artefactos
         archiveArtifacts {
             pattern('dist/**/*')
             allowEmpty(true)
         }
 
-        // Publicar resultados de tests (HTML)
         publishHtml {
             reportDir('coverage')
+            reportFiles('index.html')
+            reportName('Coverage Report')
             allowMissing(false)
             keepAll(true)
             alwaysLinkToLastBuild(true)
-            report('Coverage Report') {
-                reportFiles('index.html')
-                reportName('Coverage Report')
-                reportTitles('Coverage Report')
-            }
         }
 
-
-
-        // Publicar resultados JUnit
-        junit('test-results.xml') {
+        junit {
+            testResults('test-results.xml')
             allowEmptyResults(true)
         }
 
-        // Notificaciones por email en caso de fallo
         mailer {
             recipients('tu-email@empresa.com')
             notifyEveryUnstableBuild(true)
@@ -115,5 +107,4 @@ job('frontend-build-with-tests') {
 
         wsCleanup()
     }
-
 }
