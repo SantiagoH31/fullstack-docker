@@ -1,9 +1,4 @@
-folder('Backend') {
-    displayName('Backend')
-    description('Contiene los jobs del backend')
-}
-
-pipelineJob('Backend/backend-pipeline') {
+pipelineJob('backend-pipeline') {
     displayName('🔧 Backend - CI/CD Pipeline')
     description('Pipeline completo para el backend Node.js con Docker')
 
