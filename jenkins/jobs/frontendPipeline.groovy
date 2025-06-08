@@ -6,11 +6,7 @@ pipelineJob('frontend-build-deploy') {
         githubProjectUrl('https://github.com/legarrod/front-Docker.git')
     }
     
-    triggers {
-        githubPush()
-        cron('H/10 * * * *')
-    }
-    
+    // Cambio: usar 'scm' en lugar de 'triggers' que está deprecado
     definition {
         cpsScm {
             scm {
@@ -39,10 +35,7 @@ job('frontend-build-with-tests') {
         }
     }
     
-    triggers {
-        githubPush()
-        cron('H/10 * * * *')
-    }
+    // Cambio: usar 'scm' en lugar de 'triggers' que está deprecado
     
     wrappers {
         nodejs('NodeJS-18')
@@ -85,14 +78,15 @@ job('frontend-build-with-tests') {
             allowEmpty(true)
         }
 
-        publishHtml {
-            reportDir('coverage')
-            reportFiles('index.html')
-            reportName('Coverage Report')
-            allowMissing(false)
-            keepAll(true)
-            alwaysLinkToLastBuild(true)
-        }
+        // CORRECCIÓN: Sintaxis correcta para publishHtml
+        publishHtml([
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'coverage',
+            reportFiles: 'index.html',
+            reportName: 'Coverage Report'
+        ])
 
         junit {
             testResults('test-results.xml')
