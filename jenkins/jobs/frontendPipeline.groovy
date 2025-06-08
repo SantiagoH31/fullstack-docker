@@ -207,7 +207,10 @@ pipeline {
     
     post {
         always {
-            archiveArtifacts artifacts: 'dist/**/*', allowEmptyArchive: false
+            archiveArtifacts {
+            pattern('dist/**/*')
+            allowEmpty(false)
+        }
             cleanWs()
         }
         failure {
