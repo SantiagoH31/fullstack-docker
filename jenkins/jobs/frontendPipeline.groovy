@@ -80,13 +80,16 @@ job('frontend-build-with-tests') {
     }
     
     publishers {
+        // Archivar artefactos
         archiveArtifacts {
-            pattern('dist/**')
+            pattern('dist/**/*')
             allowEmpty(true)
         }
 
+        // Publicar resultados de tests (HTML)
         publishHtml {
-            report('coverage') {
+            report {
+                reportDir('coverage')
                 reportFiles('index.html')
                 reportName('Coverage Report')
                 allowMissing(false)
@@ -95,12 +98,19 @@ job('frontend-build-with-tests') {
             }
         }
 
+        // Publicar resultados JUnit
         junit('test-results.xml') {
             allowEmptyResults(true)
         }
 
-        mailer('tu-email@empresa.com', true, true)
+        // Notificaciones por email en caso de fallo
+        mailer {
+            recipients('tu-email@empresa.com')
+            notifyEveryUnstableBuild(true)
+            sendToIndividuals(true)
+        }
 
         wsCleanup()
     }
+
 }
