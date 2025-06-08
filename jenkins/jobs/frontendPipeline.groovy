@@ -78,16 +78,6 @@ job('frontend-build-with-tests') {
             allowEmpty(true)
         }
 
-        // CORRECCIÓN: Sintaxis correcta para publishHtml
-        publishHtml([
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'coverage',
-            reportFiles: 'index.html',
-            reportName: 'Coverage Report'
-        ])
-
         junit {
             testResults('test-results.xml')
             allowEmptyResults(true)
