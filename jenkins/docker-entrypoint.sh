@@ -1,59 +1,40 @@
 #!/bin/bash
-# jenkins/docker-entrypoint.sh
 
-set -e
+# Script de inicialización para Jenkins con Docker
 
-echo "=== Configurando permisos Docker para Jenkins ==="
+# Obtener el GID del socket de Docker del host
+DOCKER_SOCK_GID=$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo "999")
 
-# Verificar si el socket Docker existe
-if [ -S "/var/run/docker.sock" ]; then
-    echo "Docker socket encontrado"
+echo "Docker socket GID: $DOCKER_SOCK_GID"
+
+# Verificar si el grupo docker existe y ajustar su GID
+if getent group docker > /dev/null 2>&1; then
+    CURRENT_DOCKER_GID=$(getent group docker | cut -d: -f3)
+    echo "Current docker group GID: $CURRENT_DOCKER_GID"
     
-    # Obtener el GID del grupo docker del host
-    DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
-    echo "Docker socket GID: $DOCKER_GID"
-    
-    # Verificar si ya existe un grupo con ese GID
-    EXISTING_GROUP=$(getent group $DOCKER_GID | cut -d: -f1 || echo "")
-    
-    if [ "$EXISTING_GROUP" = "docker" ]; then
-        echo "Grupo docker ya tiene el GID correcto: $DOCKER_GID"
-    elif [ -n "$EXISTING_GROUP" ]; then
-        echo "Eliminando grupo existente con GID $DOCKER_GID: $EXISTING_GROUP"
-        sudo groupdel $EXISTING_GROUP || true
-        echo "Modificando grupo docker a GID $DOCKER_GID"
-        sudo groupmod -g $DOCKER_GID docker
-    else
-        echo "Modificando grupo docker a GID $DOCKER_GID"
-        sudo groupmod -g $DOCKER_GID docker
-    fi
-    
-    # Asegurar que jenkins está en el grupo docker
-    echo "Agregando usuario jenkins al grupo docker"
-    sudo usermod -aG docker jenkins
-    
-    # Verificar permisos
-    echo "Verificando configuración:"
-    echo "  - Usuario jenkins grupos: $(groups jenkins)"
-    echo "  - Docker socket permisos: $(ls -la /var/run/docker.sock)"
-    
-    # Probar acceso a Docker
-    if docker --version > /dev/null 2>&1; then
-        echo "✅ Docker CLI accesible"
-        if docker ps > /dev/null 2>&1; then
-            echo "✅ Docker daemon accesible"
-        else
-            echo "⚠️  Docker CLI instalado pero daemon no accesible"
-        fi
-    else
-        echo "❌ Docker CLI no accesible"
+    if [ "$CURRENT_DOCKER_GID" != "$DOCKER_SOCK_GID" ]; then
+        echo "Updating docker group GID to match socket..."
+        sudo groupmod -g "$DOCKER_SOCK_GID" docker
     fi
 else
-    echo "⚠️  Docker socket no encontrado en /var/run/docker.sock"
-    echo "   Asegúrate de montar el socket en docker-compose.yml"
+    echo "Creating docker group with GID $DOCKER_SOCK_GID"
+    sudo groupadd -g "$DOCKER_SOCK_GID" docker
 fi
 
-echo "=== Iniciando Jenkins ==="
+# Asegurar que jenkins esté en el grupo docker
+sudo usermod -aG docker jenkins
 
-# Ejecutar Jenkins con el entrypoint original
-exec /usr/bin/tini -- /usr/local/bin/jenkins.sh "$@"
+# Verificar acceso al socket de Docker
+echo "Testing Docker access..."
+if docker version > /dev/null 2>&1; then
+    echo "✓ Docker access successful"
+else
+    echo "✗ Docker access failed"
+    echo "Socket permissions:"
+    ls -la /var/run/docker.sock
+    echo "Jenkins groups:"
+    groups jenkins
+fi
+
+# Ejecutar el entrypoint original de Jenkins
+exec /usr/local/bin/jenkins.sh "$@"
