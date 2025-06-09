@@ -27,6 +27,10 @@ pipelineJob('backend-pipeline') {
                         url('https://github.com/legarrod/back-Docker.git')
                     }
                     branches('*/main')
+                    extensions {
+                        cleanBeforeCheckout()
+                        wipeOutWorkspace()
+                    }
                 }
             }
             scriptPath('Jenkinsfile')
