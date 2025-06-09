@@ -44,3 +44,4 @@ script-security
 bouncycastle-api
 command-launcher
 jdk-tool
+ansicolor
