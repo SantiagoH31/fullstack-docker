@@ -72,7 +72,6 @@ services:
       - GITHUB_USERNAME=${GITHUB_USERNAME}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD:-admin123}
-      # Agregar variable para Docker
       - DOCKER_HOST=unix:///var/run/docker.sock
     env_file:
       - .env
@@ -81,8 +80,11 @@ services:
     depends_on:
       - frontend
       - node-app
-    # Reiniciar automáticamente si falla
     restart: unless-stopped
+    # Privileged mode para acceso completo a Docker
+    privileged: true
+    # Ejecutar como root para manejar permisos
+    user: root
 
   test-runner:
     build:
