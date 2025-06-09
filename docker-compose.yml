@@ -55,6 +55,13 @@ services:
       context: ./jenkins
       dockerfile: Dockerfile
     container_name: jenkins-server
+    # Agregar privilegios para gestión de grupos
+    privileged: false
+    # Agregar capacidad específica para cambio de ownership
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
     ports:
       - "8080:8080" 
       - "50000:50000"
@@ -69,6 +76,8 @@ services:
       - GITHUB_USERNAME=${GITHUB_USERNAME}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - JENKINS_ADMIN_PASSWORD=${JENKINS_ADMIN_PASSWORD:-admin123}
+      # Agregar variable para Docker
+      - DOCKER_HOST=unix:///var/run/docker.sock
     env_file:
       - .env
     networks:
@@ -76,6 +85,8 @@ services:
     depends_on:
       - frontend
       - node-app
+    # Reiniciar automáticamente si falla
+    restart: unless-stopped
 
 volumes:
   pgdata:
