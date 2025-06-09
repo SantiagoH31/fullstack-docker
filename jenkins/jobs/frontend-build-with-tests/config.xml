@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+    <actions/>
+    <description>Job completo para construir el frontend con tests unitarios y cobertura</description>
+    <keepDependencies>false</keepDependencies>
+    <properties/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <triggers/>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>
+            echo "=== Installing dependencies ==="
+            npm ci
+
+            echo "=== Running linting ==="
+            npm run lint || echo "Linting completed with warnings"
+
+            echo "=== Running unit tests with coverage ==="
+            npm run test -- --watch=false --browsers=ChromeHeadlessCI --code-coverage=true
+
+            echo "=== Building application ==="
+            npm run build --prod
+
+            echo "=== Running e2e tests (opcional) ==="
+            # npm run e2e -- --webdriver-update=false
+
+            echo "=== Building Docker image ==="
+            docker build -t angular-frontend:${BUILD_NUMBER} .
+            docker tag angular-frontend:${BUILD_NUMBER} angular-frontend:latest
+
+            echo "=== Cleanup ==="
+            docker system prune -f
+        </command>
+        </hudson.tasks.Shell>
+    </builders>
+    <publishers>
+        <hudson.tasks.ArtifactArchiver>
+            <artifacts>dist/**/*</artifacts>
+            <allowEmptyArchive>true</allowEmptyArchive>
+            <defaultExcludes>true</defaultExcludes>
+            <fingerprint>false</fingerprint>
+            <onlyIfSuccessful>false</onlyIfSuccessful>
+            <followSymlinks>true</followSymlinks>
+            <caseSensitive>true</caseSensitive>
+        </hudson.tasks.ArtifactArchiver>
+        <hudson.tasks.Mailer plugin="mailer@489.vd4b_25144138f">
+            <recipients>tu-email@empresa.com</recipients>
+            <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+            <sendToIndividuals>true</sendToIndividuals>
+        </hudson.tasks.Mailer>
+        <hudson.plugins.ws__cleanup.WsCleanup>
+            <patterns/>
+            <deleteDirs>false</deleteDirs>
+            <cleanWhenSuccess>true</cleanWhenSuccess>
+            <cleanWhenUnstable>true</cleanWhenUnstable>
+            <cleanWhenFailure>true</cleanWhenFailure>
+            <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+            <cleanWhenAborted>true</cleanWhenAborted>
+            <notFailBuild>false</notFailBuild>
+            <externalDelete/>
+        </hudson.plugins.ws__cleanup.WsCleanup>
+    </publishers>
+    <buildWrappers>
+        <jenkins.plugins.nodejs.tools.NpmPackagesBuildWrapper>
+            <nodeJSInstallationName>NodeJS-18</nodeJSInstallationName>
+        </jenkins.plugins.nodejs.tools.NpmPackagesBuildWrapper>
+        <hudson.plugins.build__timeout.BuildTimeoutWrapper>
+            <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+                <timeoutMinutes>15</timeoutMinutes>
+            </strategy>
+            <operationList/>
+        </hudson.plugins.build__timeout.BuildTimeoutWrapper>
+        <hudson.plugins.timestamper.TimestamperBuildWrapper/>
+        <hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+            <colorMapName>xterm</colorMapName>
+        </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+    </buildWrappers>
+    <displayName>Frontend - Build with Tests</displayName>
+    <scm class="hudson.plugins.git.GitSCM">
+        <userRemoteConfigs>
+            <hudson.plugins.git.UserRemoteConfig>
+                <url>https://github.com/legarrod/front-Docker.git</url>
+            </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+            <hudson.plugins.git.BranchSpec>
+                <name>*/main</name>
+            </hudson.plugins.git.BranchSpec>
+        </branches>
+        <configVersion>2</configVersion>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <gitTool>Default</gitTool>
+    </scm>
+</project>

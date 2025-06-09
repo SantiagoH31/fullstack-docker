@@ -1,0 +1,29 @@
+Started by an SCM change
+Running as SYSTEM
+Building in workspace /var/jenkins_home/jobs/seed-job/workspace
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/SantiagoH31/fullstack-docker.git
+ > git init /var/jenkins_home/jobs/seed-job/workspace # timeout=10
+Fetching upstream changes from https://github.com/SantiagoH31/fullstack-docker.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/SantiagoH31/fullstack-docker.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://github.com/SantiagoH31/fullstack-docker.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 786907ab6245d55a7c5a8d1e631f38f386bd4fdc (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 786907ab6245d55a7c5a8d1e631f38f386bd4fdc # timeout=10
+Commit message: "ajuste de jobs"
+First time build. Skipping changelog.
+Processing DSL script jenkins/jobs/backendPipeline.groovy
+Warning: (backendPipeline.groovy, line 17) triggers is deprecated
+Processing DSL script jenkins/jobs/frontendPipeline.groovy
+Added items:
+    GeneratedJob{name='frontend-build-with-tests'}
+    GeneratedJob{name='backend-pipeline'}
+    GeneratedJob{name='frontend-build-deploy'}
+Finished: SUCCESS

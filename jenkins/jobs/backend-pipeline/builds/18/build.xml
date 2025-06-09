@@ -1,0 +1,554 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-build plugin="workflow-job@1532.va_9a_d244074a_3">
+  <actions>
+    <hudson.model.CauseAction>
+      <causeBag class="linked-hash-map">
+        <entry>
+          <hudson.triggers.TimerTrigger_-TimerTriggerCause/>
+          <int>1</int>
+        </entry>
+      </causeBag>
+    </hudson.model.CauseAction>
+    <hudson.model.ParametersAction>
+      <safeParameters class="sorted-set"/>
+      <parameters>
+        <hudson.model.StringParameterValue>
+          <name>ENVIRONMENT</name>
+          <description>Ambiente de despliegue</description>
+          <value>development</value>
+        </hudson.model.StringParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>SKIP_TESTS</name>
+          <description>Saltar tests unitarios</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>SKIP_INTEGRATION_TESTS</name>
+          <description>Saltar tests de integración</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>FORCE_DEPLOY</name>
+          <description>Forzar deploy aunque fallen los tests</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.StringParameterValue>
+          <name>DOCKER_TAG</name>
+          <description>Tag para la imagen Docker</description>
+          <value>latest</value>
+        </hudson.model.StringParameterValue>
+      </parameters>
+      <parameterDefinitionNames>
+        <string>ENVIRONMENT</string>
+        <string>SKIP_TESTS</string>
+        <string>SKIP_INTEGRATION_TESTS</string>
+        <string>FORCE_DEPLOY</string>
+        <string>DOCKER_TAG</string>
+      </parameterDefinitionNames>
+    </hudson.model.ParametersAction>
+    <hudson.plugins.git.util.BuildData plugin="git@5.7.0">
+      <buildsByBranchName>
+        <entry>
+          <string>refs/remotes/origin/main</string>
+          <hudson.plugins.git.util.Build>
+            <marked plugin="git-client@6.1.3">
+              <sha1>fcbc02e7aa054bfde5ba5a6c17c5e406b2a3f8b5</sha1>
+              <branches class="list">
+                <hudson.plugins.git.Branch>
+                  <sha1 reference="../../../sha1"/>
+                  <name>refs/remotes/origin/main</name>
+                </hudson.plugins.git.Branch>
+              </branches>
+            </marked>
+            <revision reference="../marked"/>
+            <hudsonBuildNumber>18</hudsonBuildNumber>
+          </hudson.plugins.git.util.Build>
+        </entry>
+      </buildsByBranchName>
+      <lastBuild reference="../buildsByBranchName/entry/hudson.plugins.git.util.Build"/>
+      <remoteUrls>
+        <string>https://github.com/legarrod/back-Docker.git</string>
+      </remoteUrls>
+    </hudson.plugins.git.util.BuildData>
+    <org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState plugin="workflow-scm-step@437.v05a_f66b_e5ef8">
+      <revisionStates>
+        <entry>
+          <string>git https://github.com/legarrod/back-Docker.git</string>
+          <hudson.scm.SCMRevisionState_-None/>
+        </entry>
+      </revisionStates>
+    </org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState>
+    <org.jenkinsci.plugins.workflow.libs.LibrariesAction plugin="pipeline-groovy-lib@752.vdddedf804e72">
+      <libraries/>
+    </org.jenkinsci.plugins.workflow.libs.LibrariesAction>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.ExecutionModelAction plugin="pipeline-model-definition@2.2255.v56a_15e805f12">
+      <stagesUUID>f86735ef-9474-459d-b668-9c2da82d5b94</stagesUUID>
+      <pipelineDefs>
+        <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTPipelineDef plugin="pipeline-model-api@2.2255.v56a_15e805f12">
+          <stages>
+            <stages>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Checkout</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>checkout</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>scm</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-GStringValue>
+                                <value class="string">${scm}</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-GStringValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Install Dependencies</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>sh</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>script</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                                <value class="string">npm ci</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Lint</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>sh</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>script</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                                <value class="string">npm run lint || echo &quot;Linting completed with warnings&quot;</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Build Docker Image</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTScriptBlock>
+                        <name>script</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>scriptBlock</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                                <value class="string">docker.build(&quot;${IMAGE_NAME}:${IMAGE_TAG}&quot;)
+                    docker.build(&quot;${IMAGE_NAME}:latest&quot;)</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTScriptBlock>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Security Scan</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>sh</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>script</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                                <value class="string">npm audit --audit-level high</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+                <name>Container Security Scan</name>
+                <branches>
+                  <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                    <name>default</name>
+                    <steps>
+                      <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                        <name>sh</name>
+                        <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                          <arguments class="linked-hash-map">
+                            <entry>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                                <key>script</key>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                                <value class="string">docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${IMAGE_NAME}:${IMAGE_TAG} || true</value>
+                              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                            </entry>
+                          </arguments>
+                        </args>
+                      </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                    </steps>
+                  </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBranch>
+                </branches>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
+            </stages>
+            <uuid>f86735ef-9474-459d-b668-9c2da82d5b94</uuid>
+          </stages>
+          <postBuild>
+            <conditions>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+                <condition>always</condition>
+                <branch>
+                  <name>default</name>
+                  <steps>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                      <name>cleanWs</name>
+                      <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                        <arguments class="linked-hash-map"/>
+                      </args>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                  </steps>
+                </branch>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+                <condition>success</condition>
+                <branch>
+                  <name>default</name>
+                  <steps>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                      <name>echo</name>
+                      <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                        <arguments class="linked-hash-map">
+                          <entry>
+                            <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <key>message</key>
+                            </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                            <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                              <value class="string">Backend pipeline completed successfully!</value>
+                            </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                          </entry>
+                        </arguments>
+                      </args>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                  </steps>
+                </branch>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+              <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+                <condition>failure</condition>
+                <branch>
+                  <name>default</name>
+                  <steps>
+                    <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                      <name>echo</name>
+                      <args class="org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTNamedArgumentList">
+                        <arguments class="linked-hash-map">
+                          <entry>
+                            <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                              <key>message</key>
+                            </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                            <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                              <value class="string">Backend pipeline failed!</value>
+                            </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                          </entry>
+                        </arguments>
+                      </args>
+                    </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStep>
+                  </steps>
+                </branch>
+              </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTBuildCondition>
+            </conditions>
+          </postBuild>
+          <environment>
+            <variables class="linked-hash-map">
+              <entry>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                  <key>IMAGE_NAME</key>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                  <value class="string">node-backend</value>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+              </entry>
+              <entry>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                  <key>IMAGE_TAG</key>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-GStringValue>
+                  <value class="string">&quot;${BUILD_NUMBER}&quot;</value>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-GStringValue>
+              </entry>
+            </variables>
+          </environment>
+          <agent>
+            <agentType>
+              <key>any</key>
+            </agentType>
+          </agent>
+          <tools>
+            <tools class="linked-hash-map">
+              <entry>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                  <key>nodejs</key>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTKey>
+                <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+                  <value class="string">NodeJS-18</value>
+                </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTValue_-ConstantValue>
+              </entry>
+            </tools>
+          </tools>
+        </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTPipelineDef>
+      </pipelineDefs>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.ExecutionModelAction>
+    <org.jenkinsci.plugins.workflow.cps.EnvActionImpl plugin="workflow-cps@4106.v7a_8a_8176d450">
+      <env class="tree-map"/>
+    </org.jenkinsci.plugins.workflow.cps.EnvActionImpl>
+  </actions>
+  <queueId>7</queueId>
+  <timestamp>1749488160475</timestamp>
+  <startTime>1749488160644</startTime>
+  <result>FAILURE</result>
+  <duration>24647</duration>
+  <charset>UTF-8</charset>
+  <keepLog>false</keepLog>
+  <execution class="org.jenkinsci.plugins.workflow.cps.CpsFlowExecution">
+    <result>FAILURE</result>
+    <script>pipeline {
+    agent any
+    
+    tools {
+        nodejs &apos;NodeJS-18&apos;
+    }
+    
+    environment {
+        IMAGE_NAME = &apos;node-backend&apos;
+        IMAGE_TAG = &quot;${BUILD_NUMBER}&quot;
+    }
+    
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage(&apos;Install Dependencies&apos;) {
+            steps {
+                sh &apos;npm ci&apos;
+            }
+        }
+        
+        stage(&apos;Lint&apos;) {
+            steps {
+                sh &apos;npm run lint || echo &quot;Linting completed with warnings&quot;&apos;
+            }
+        }
+        
+        /*stage(&apos;Unit Tests&apos;) {
+            steps {
+                sh &apos;npm test&apos;
+            }
+            post {
+                always {
+                    publishTestResults testResultsPattern: &apos;test-results.xml&apos;
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: &apos;coverage&apos;,
+                        reportFiles: &apos;index.html&apos;,
+                        reportName: &apos;Coverage Report&apos;
+                    ])
+                }
+            }
+        }
+        
+        stage(&apos;Integration Tests&apos;) {
+            steps {
+                script {
+                    // Levantar base de datos temporal para tests
+                    sh &apos;&apos;&apos;
+                        docker run -d --name test-db-${BUILD_NUMBER} \
+                            -e POSTGRES_DB=testdb \
+                            -e POSTGRES_USER=test \
+                            -e POSTGRES_PASSWORD=test \
+                            -p 5433:5432 \
+                            postgres:14
+                        
+                        sleep 10
+                        
+                        # Ejecutar tests de integración
+                        export DB_HOST=localhost
+                        export DB_PORT=5433
+                        export DB_USER=test
+                        export DB_PASSWORD=test
+                        export DB_NAME=testdb
+                        
+                        npm run test:integration || true
+                    &apos;&apos;&apos;
+                }
+            }
+            post {
+                always {
+                    sh &apos;docker rm -f test-db-${BUILD_NUMBER} || true&apos;
+                }
+            }
+        }*/
+        
+        stage(&apos;Build Docker Image&apos;) {
+            steps {
+                script {
+                    docker.build(&quot;${IMAGE_NAME}:${IMAGE_TAG}&quot;)
+                    docker.build(&quot;${IMAGE_NAME}:latest&quot;)
+                }
+            }
+        }
+        
+        stage(&apos;Security Scan&apos;) {
+            steps {
+                sh &apos;npm audit --audit-level high&apos;
+            }
+        }
+        
+        stage(&apos;Container Security Scan&apos;) {
+            steps {
+                sh &apos;docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image ${IMAGE_NAME}:${IMAGE_TAG} || true&apos;
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo &apos;Backend pipeline completed successfully!&apos;
+        }
+        failure {
+            echo &apos;Backend pipeline failed!&apos;
+        }
+    }
+}</script>
+    <loadedScripts class="linked-hash-map"/>
+    <durabilityHint>MAX_SURVIVABILITY</durabilityHint>
+    <timings class="map">
+      <entry>
+        <string>flowNode</string>
+        <long>888569716</long>
+      </entry>
+      <entry>
+        <string>classLoad</string>
+        <long>7895341731</long>
+      </entry>
+      <entry>
+        <string>runQueue</string>
+        <long>15281275053</long>
+      </entry>
+      <entry>
+        <string>run</string>
+        <long>14024812557</long>
+      </entry>
+      <entry>
+        <string>parse</string>
+        <long>777793876</long>
+      </entry>
+      <entry>
+        <string>saveProgram</string>
+        <long>5853802124</long>
+      </entry>
+    </timings>
+    <internalCalls class="sorted-set">
+      <string>hudson.model.Result.fromString</string>
+      <string>org.jenkinsci.plugins.pipeline.StageStatus.TAG_NAME</string>
+      <string>org.jenkinsci.plugins.workflow.job.WorkflowRun.result</string>
+    </internalCalls>
+    <sandbox>true</sandbox>
+    <iota>99</iota>
+    <head>1:99</head>
+    <done>true</done>
+    <resumeBlocked>false</resumeBlocked>
+    <storageDir>workflow-completed</storageDir>
+  </execution>
+  <completed>true</completed>
+  <checkouts class="hudson.util.PersistedList">
+    <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+      <scm class="hudson.plugins.git.GitSCM" plugin="git@5.7.0">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>https://github.com/legarrod/back-Docker.git</url>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/main</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <gitTool>Default</gitTool>
+        <extensions/>
+      </scm>
+      <node></node>
+      <workspace>/var/jenkins_home/jobs/backend-pipeline/workspace@script/9d265736b99f9a5dc3f6f5c786cfa046716281ab4142ea5ec29c55753e73bc35</workspace>
+      <changelogFile>/var/jenkins_home/jobs/backend-pipeline/builds/18/changelog13769760790842243848.xml</changelogFile>
+      <pollingBaseline class="hudson.scm.SCMRevisionState$None" reference="../../../actions/org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState/revisionStates/entry/hudson.scm.SCMRevisionState_-None"/>
+    </org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+    <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+      <scm class="hudson.plugins.git.GitSCM" reference="../../org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout/scm"/>
+      <node></node>
+      <workspace>/var/jenkins_home/jobs/backend-pipeline/workspace</workspace>
+      <pollingBaseline class="hudson.scm.SCMRevisionState$None" reference="../../../actions/org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState/revisionStates/entry/hudson.scm.SCMRevisionState_-None"/>
+    </org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+    <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+      <scm class="hudson.plugins.git.GitSCM" reference="../../org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout/scm"/>
+      <node></node>
+      <workspace>/var/jenkins_home/jobs/backend-pipeline/workspace</workspace>
+      <pollingBaseline class="hudson.scm.SCMRevisionState$None" reference="../../../actions/org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState/revisionStates/entry/hudson.scm.SCMRevisionState_-None"/>
+    </org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
+  </checkouts>
+</flow-build>

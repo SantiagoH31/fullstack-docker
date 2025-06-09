@@ -1,0 +1,87 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1532.va_9a_d244074a_3">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2255.v56a_15e805f12"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2255.v56a_15e805f12">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>Pipeline completo para el backend Node.js con Docker</description>
+  <displayName>Backend - CI/CD Pipeline</displayName>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ENVIRONMENT</name>
+          <description>Ambiente de despliegue</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>development</string>
+              <string>staging</string>
+              <string>production</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>SKIP_TESTS</name>
+          <description>Saltar tests unitarios</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>SKIP_INTEGRATION_TESTS</name>
+          <description>Saltar tests de integración</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>FORCE_DEPLOY</name>
+          <description>Forzar deploy aunque fallen los tests</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>DOCKER_TAG</name>
+          <description>Tag para la imagen Docker</description>
+          <defaultValue>latest</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.43.0">
+      <projectUrl>https://github.com/legarrod/back-Docker.git</projectUrl>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.43.0">
+          <spec></spec>
+        </com.cloudbees.jenkins.GitHubPushTrigger>
+        <hudson.triggers.TimerTrigger>
+          <spec>H/10 * * * *</spec>
+        </hudson.triggers.TimerTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@4106.v7a_8a_8176d450">
+    <scm class="hudson.plugins.git.GitSCM" plugin="git@5.7.0">
+      <configVersion>2</configVersion>
+      <userRemoteConfigs>
+        <hudson.plugins.git.UserRemoteConfig>
+          <url>https://github.com/legarrod/back-Docker.git</url>
+        </hudson.plugins.git.UserRemoteConfig>
+      </userRemoteConfigs>
+      <branches>
+        <hudson.plugins.git.BranchSpec>
+          <name>*/main</name>
+        </hudson.plugins.git.BranchSpec>
+      </branches>
+      <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+      <gitTool>Default</gitTool>
+      <extensions/>
+    </scm>
+    <scriptPath>Jenkinsfile</scriptPath>
+    <lightweight>false</lightweight>
+  </definition>
+  <disabled>false</disabled>
+</flow-definition>
