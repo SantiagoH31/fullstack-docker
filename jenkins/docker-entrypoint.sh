@@ -1,3 +1,5 @@
+#!/bin/bash
+# jenkins/docker-entrypoint.sh
 
 set -e
 
