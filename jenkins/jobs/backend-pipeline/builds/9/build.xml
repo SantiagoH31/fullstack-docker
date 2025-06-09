@@ -1,0 +1,59 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-build plugin="workflow-job@1532.va_9a_d244074a_3">
+  <actions>
+    <hudson.model.CauseAction>
+      <causeBag class="linked-hash-map">
+        <entry>
+          <hudson.triggers.TimerTrigger_-TimerTriggerCause/>
+          <int>1</int>
+        </entry>
+      </causeBag>
+    </hudson.model.CauseAction>
+    <hudson.model.ParametersAction>
+      <safeParameters class="sorted-set"/>
+      <parameters>
+        <hudson.model.StringParameterValue>
+          <name>ENVIRONMENT</name>
+          <description>Ambiente de despliegue</description>
+          <value>development</value>
+        </hudson.model.StringParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>SKIP_TESTS</name>
+          <description>Saltar tests unitarios</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>SKIP_INTEGRATION_TESTS</name>
+          <description>Saltar tests de integración</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.BooleanParameterValue>
+          <name>FORCE_DEPLOY</name>
+          <description>Forzar deploy aunque fallen los tests</description>
+          <value>false</value>
+        </hudson.model.BooleanParameterValue>
+        <hudson.model.StringParameterValue>
+          <name>DOCKER_TAG</name>
+          <description>Tag para la imagen Docker</description>
+          <value>latest</value>
+        </hudson.model.StringParameterValue>
+      </parameters>
+      <parameterDefinitionNames>
+        <string>ENVIRONMENT</string>
+        <string>SKIP_TESTS</string>
+        <string>SKIP_INTEGRATION_TESTS</string>
+        <string>FORCE_DEPLOY</string>
+        <string>DOCKER_TAG</string>
+      </parameterDefinitionNames>
+    </hudson.model.ParametersAction>
+  </actions>
+  <queueId>18</queueId>
+  <timestamp>1749481620009</timestamp>
+  <startTime>1749481620035</startTime>
+  <result>FAILURE</result>
+  <duration>192</duration>
+  <charset>UTF-8</charset>
+  <keepLog>false</keepLog>
+  <completed>true</completed>
+  <checkouts class="hudson.util.PersistedList"/>
+</flow-build>

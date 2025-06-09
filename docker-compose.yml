@@ -23,6 +23,9 @@ services:
     container_name: node-backend
     ports:
       - "3000:3000"
+    volumes:
+      - ./back-Docker:/app
+      - /app/node_modules
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -76,6 +79,26 @@ services:
     depends_on:
       - frontend
       - node-app
+
+  test-runner:
+    build:
+      context: ./back-Docker
+      dockerfile: Dockerfile
+    container_name: node-test-runner
+    volumes:
+      - ./back-Docker:/app
+      - /app/node_modules
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=example
+      - DB_NAME=mydb
+    depends_on:
+      - db
+    networks:
+      - app-network
+    command: npm test 
 
 volumes:
   pgdata:

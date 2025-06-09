@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><flow-definition>
+    <actions/>
+    <description>Pipeline para construir y desplegar el frontend Angular con tests</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <com.coravy.hudson.plugins.github.GithubProjectProperty>
+            <projectUrl>https://github.com/legarrod/front-Docker.git</projectUrl>
+        </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    </properties>
+    <triggers/>
+    <displayName>Frontend - Build and Deploy</displayName>
+    <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition">
+        <scriptPath>Jenkinsfile</scriptPath>
+        <lightweight>false</lightweight>
+        <scm class="hudson.plugins.git.GitSCM">
+            <userRemoteConfigs>
+                <hudson.plugins.git.UserRemoteConfig>
+                    <url>https://github.com/legarrod/front-Docker.git</url>
+                </hudson.plugins.git.UserRemoteConfig>
+            </userRemoteConfigs>
+            <branches>
+                <hudson.plugins.git.BranchSpec>
+                    <name>*/main</name>
+                </hudson.plugins.git.BranchSpec>
+            </branches>
+            <configVersion>2</configVersion>
+            <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+            <gitTool>Default</gitTool>
+        </scm>
+    </definition>
+</flow-definition>
