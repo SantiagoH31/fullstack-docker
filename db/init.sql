@@ -7,13 +7,13 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users (name, email, password) VALUES ('Admin', 'admin@example.com', '12345');
 
-DO $$
+
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'todo_status') THEN
         CREATE TYPE todo_status AS ENUM ('To Do', 'In Progress', 'Done');
     END IF;
 END
-$$;
+
 
 CREATE TABLE IF NOT EXISTS todo (
     id SERIAL PRIMARY KEY,
